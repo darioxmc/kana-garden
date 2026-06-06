@@ -1,4 +1,4 @@
-const CACHE_NAME = "kana-garden-v6";
+const CACHE_NAME = "kana-garden-v0.7.0";
 const APP_SHELL = [
   "./",
   "./index.html",

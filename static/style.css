@@ -308,6 +308,8 @@ footer {
 }
 footer button { padding: 0; border: 0; color: var(--muted); background: none; cursor: pointer; font-size: 10px; }
 footer button:hover { color: var(--coral); }
+.footer-actions { display: flex; align-items: center; gap: 12px; }
+.app-version { color: var(--muted); font-size: 9px; letter-spacing: 0.04em; }
 
 dialog {
   width: min(680px, calc(100% - 28px)); max-height: min(760px, calc(100vh - 40px));
@@ -375,14 +377,20 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .prompt-wrap { min-height: 190px; }
   .answer-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 108px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 7px;
   }
   .answer-row input {
     grid-column: 1 / -1;
     width: 100%;
   }
-  .answer-row button { min-width: 0; }
+  .answer-row button {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    padding: 0 10px;
+    white-space: nowrap;
+  }
   .answer-row .skip-button {
     grid-column: 1;
     grid-row: 2;
@@ -391,8 +399,6 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .answer-row #check-button {
     grid-column: 2;
     grid-row: 2;
-    width: 108px;
-    white-space: nowrap;
   }
   .stats { margin-top: 18px; }
   .stat-icon { display: none; }
@@ -400,6 +406,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .segmented span { font-size: 10px; }
   .segmented { grid-template-columns: repeat(2, 1fr); }
   footer { padding-inline: 3px; }
+  .footer-actions { gap: 8px; }
   .kana-grid { grid-template-columns: repeat(5, 1fr); }
   dialog { padding: 20px 15px; }
 }
