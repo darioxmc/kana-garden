@@ -183,7 +183,6 @@ function showQuestion(prompt, label) {
     feedback.className = "feedback";
     input.value = "";
     state.awaitingNext = false;
-    skipButton.disabled = false;
     checkButton.innerHTML = 'Check <span aria-hidden="true">→</span>';
     promptEl.classList.remove("changing");
     input.focus();
@@ -196,7 +195,10 @@ function acceptedAnswers(answer) {
 }
 
 skipButton.addEventListener("click", () => {
-  if (state.awaitingNext) return;
+  if (state.awaitingNext) {
+    nextQuestion();
+    return;
+  }
 
   const isKanji = state.current.kind === "kanji";
   const expected = isKanji ? state.current.item.meanings[0] : state.current.item.romaji;
@@ -205,7 +207,6 @@ skipButton.addEventListener("click", () => {
     : `Skipped — ${state.current.prompt} is “${expected}”`;
   feedback.className = "feedback skipped";
   state.awaitingNext = true;
-  skipButton.disabled = true;
   checkButton.innerHTML = 'Next <span aria-hidden="true">→</span>';
 });
 
@@ -255,7 +256,6 @@ form.addEventListener("submit", (event) => {
   }
 
   state.awaitingNext = true;
-  skipButton.disabled = true;
   checkButton.innerHTML = 'Next <span aria-hidden="true">→</span>';
   updateStats();
   saveProgress();

@@ -375,7 +375,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .prompt-wrap { min-height: 190px; }
   .answer-row {
     display: grid;
-    grid-template-columns: 1fr 92px;
+    grid-template-columns: minmax(0, 1fr) 108px;
     gap: 7px;
   }
   .answer-row input {
@@ -391,6 +391,8 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .answer-row #check-button {
     grid-column: 2;
     grid-row: 2;
+    width: 108px;
+    white-space: nowrap;
   }
   .stats { margin-top: 18px; }
   .stat-icon { display: none; }
