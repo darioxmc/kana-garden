@@ -9,6 +9,15 @@
   <meta name="apple-mobile-web-app-title" content="Kana Garden">
   <meta name="description" content="A calm, offline-friendly Japanese kana practice app.">
   <title>Kana Garden — Japanese Kana Practice</title>
+  <script>
+    (() => {
+      const saved = localStorage.getItem("kana-garden-theme") || "auto";
+      const dark = saved === "night" ||
+        (saved === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.theme = dark ? "night" : "day";
+      document.documentElement.dataset.themePreference = saved;
+    })();
+  </script>
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
@@ -22,9 +31,16 @@
         <span class="brand-mark" aria-hidden="true">あ</span>
         <span><strong>Kana Garden</strong><small>かなガーデン</small></span>
       </a>
-      <button class="chart-button" id="open-chart" type="button">
-        <span aria-hidden="true">⌗</span> Study chart
-      </button>
+      <div class="header-actions">
+        <button class="theme-button" id="theme-toggle" type="button"
+                aria-label="Theme: automatic" title="Theme: automatic">
+          <span class="theme-icon" aria-hidden="true">◐</span>
+          <span class="theme-label">Auto</span>
+        </button>
+        <button class="chart-button" id="open-chart" type="button">
+          <span aria-hidden="true">⌗</span> Study chart
+        </button>
+      </div>
     </header>
 
     <main>
@@ -87,7 +103,8 @@
             <label for="answer-input" id="answer-label">Type the romaji</label>
             <div class="answer-row">
               <input id="answer-input" name="answer" inputmode="latin" autocapitalize="none"
-                     spellcheck="false" placeholder="e.g. ka" aria-describedby="feedback">
+                     autocomplete="off" autocorrect="off" spellcheck="false"
+                     enterkeyhint="done" placeholder="e.g. ka" aria-describedby="feedback">
               <button type="submit" id="check-button">Check <span aria-hidden="true">→</span></button>
             </div>
             <p class="feedback" id="feedback" aria-live="polite">Press Enter to check your answer</p>

@@ -75,6 +75,40 @@ const checkButton = document.querySelector("#check-button");
 const practiceTitle = document.querySelector("#practice-title");
 const answerLabel = document.querySelector("#answer-label");
 const focusFieldset = document.querySelector("#focus-fieldset");
+const themeToggle = document.querySelector("#theme-toggle");
+const themeColor = document.querySelector('meta[name="theme-color"]');
+const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+const THEME_KEY = "kana-garden-theme";
+const THEME_OPTIONS = ["auto", "day", "night"];
+
+function applyTheme(preference) {
+  const resolved = preference === "auto"
+    ? (colorScheme.matches ? "night" : "day")
+    : preference;
+  const labels = { auto: "Auto", day: "Day", night: "Night" };
+  const icons = { auto: "◐", day: "☀", night: "☾" };
+
+  document.documentElement.dataset.theme = resolved;
+  document.documentElement.dataset.themePreference = preference;
+  themeToggle.querySelector(".theme-label").textContent = labels[preference];
+  themeToggle.querySelector(".theme-icon").textContent = icons[preference];
+  themeToggle.setAttribute("aria-label", `Theme: ${labels[preference].toLowerCase()}`);
+  themeToggle.title = `Theme: ${labels[preference].toLowerCase()}`;
+  themeColor.content = resolved === "night" ? "#111d1a" : "#f4efe5";
+}
+
+themeToggle.addEventListener("click", () => {
+  const current = localStorage.getItem(THEME_KEY) || "auto";
+  const next = THEME_OPTIONS[(THEME_OPTIONS.indexOf(current) + 1) % THEME_OPTIONS.length];
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+});
+
+colorScheme.addEventListener("change", () => {
+  if ((localStorage.getItem(THEME_KEY) || "auto") === "auto") applyTheme("auto");
+});
+
+applyTheme(localStorage.getItem(THEME_KEY) || "auto");
 
 function settings() {
   return {
