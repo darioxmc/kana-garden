@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Kana Garden Brush";
+  src: url("../static/fonts/YujiSyuku-KanaGarden.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
   --ink: #20352f;
@@ -251,12 +259,19 @@ legend span { float: right; color: var(--muted); font-size: 10px; font-weight: 5
   height: clamp(112px, 12vw, 142px);
   display: grid;
   place-items: center;
-  font: 400 clamp(88px, 11vw, 126px)/1 "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
+  font-size: clamp(88px, 11vw, 126px);
+  line-height: 1;
+  font-style: normal;
+  font-synthesis: none;
   transition: opacity 180ms ease, transform 180ms ease, color 180ms ease;
 }
+html[data-character-font="brush"] .kana-prompt {
+  font-family: "Kana Garden Brush", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+}
 html[data-character-font="clear"] .kana-prompt {
-  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
-  font-weight: 500;
+  font-family: Meiryo, "Yu Gothic", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-weight: 400;
 }
 .kana-prompt.changing { opacity: 0; transform: translateY(6px); }
 .kana-prompt.success { color: var(--green); transform: scale(1.06); }
@@ -364,9 +379,15 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   border: 1px solid var(--line); border-radius: 9px; background: var(--input);
 }
 .kana-cell strong { font: 400 23px/1.1 "Yu Mincho", serif; }
+html[data-character-font="brush"] .kana-cell strong {
+  font-family: "Kana Garden Brush", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-weight: 400;
+  font-synthesis: none;
+}
 html[data-character-font="clear"] .kana-cell strong {
-  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
-  font-weight: 500;
+  font-family: Meiryo, "Yu Gothic", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
 }
 .kana-cell span { margin-top: 4px; color: var(--muted); font-size: 8px; }
 .kana-cell.kanji-cell { aspect-ratio: 0.9; }

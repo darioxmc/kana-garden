@@ -343,6 +343,7 @@ function renderChart(chart) {
   KANA.forEach((item) => {
     const cell = document.createElement("div");
     cell.className = "kana-cell";
+    cell.lang = "ja";
     cell.innerHTML = `<strong>${item[chart]}</strong><span>${item.romaji}</span>`;
     kanaGrid.appendChild(cell);
   });

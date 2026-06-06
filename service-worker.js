@@ -1,10 +1,12 @@
-const CACHE_NAME = "kana-garden-v0.8.2";
+const CACHE_NAME = "kana-garden-v0.8.4";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./static/style.css",
   "./static/app.js",
+  "./static/fonts/YujiSyuku-KanaGarden.woff2",
+  "./static/fonts/OFL-YujiSyuku.txt",
   "./icons/icon.svg",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
