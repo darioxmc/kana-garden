@@ -97,7 +97,14 @@
           <div class="prompt-wrap">
             <div class="prompt-halo" aria-hidden="true"></div>
             <div class="kana-prompt" id="kana-prompt" aria-live="polite">あ</div>
-            <div class="script-label" id="script-label">HIRAGANA</div>
+            <div class="prompt-meta">
+              <div class="script-label" id="script-label">HIRAGANA</div>
+              <button class="font-toggle" id="font-toggle" type="button"
+                      aria-label="Character style: brush" title="Switch to clear characters">
+                <span aria-hidden="true">筆</span>
+                <span class="font-toggle-label">Brush</span>
+              </button>
+            </div>
           </div>
           <form id="answer-form" autocomplete="off">
             <label for="answer-input" id="answer-label">Type the romaji</label>
@@ -122,7 +129,7 @@
     <footer>
       <p>Built for steady progress <span aria-hidden="true">·</span> 頑張って</p>
       <div class="footer-actions">
-        <span class="app-version">v0.7.0</span>
+        <span class="app-version">v0.8.0</span>
         <button id="reset-progress" type="button">Reset session</button>
       </div>
     </footer>

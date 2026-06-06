@@ -77,10 +77,30 @@ const practiceTitle = document.querySelector("#practice-title");
 const answerLabel = document.querySelector("#answer-label");
 const focusFieldset = document.querySelector("#focus-fieldset");
 const themeToggle = document.querySelector("#theme-toggle");
+const fontToggle = document.querySelector("#font-toggle");
 const themeColor = document.querySelector('meta[name="theme-color"]');
 const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const THEME_KEY = "kana-garden-theme";
 const THEME_OPTIONS = ["auto", "day", "night"];
+const FONT_KEY = "kana-garden-character-font";
+
+function applyCharacterFont(preference) {
+  const isClear = preference === "clear";
+  document.documentElement.dataset.characterFont = preference;
+  fontToggle.querySelector("[aria-hidden]").textContent = isClear ? "字" : "筆";
+  fontToggle.querySelector(".font-toggle-label").textContent = isClear ? "Clear" : "Brush";
+  fontToggle.setAttribute("aria-label", `Character style: ${isClear ? "clear" : "brush"}`);
+  fontToggle.title = `Switch to ${isClear ? "brush" : "clear"} characters`;
+}
+
+fontToggle.addEventListener("click", () => {
+  const current = localStorage.getItem(FONT_KEY) || "brush";
+  const next = current === "brush" ? "clear" : "brush";
+  localStorage.setItem(FONT_KEY, next);
+  applyCharacterFont(next);
+});
+
+applyCharacterFont(localStorage.getItem(FONT_KEY) || "brush");
 
 function applyTheme(preference) {
   const resolved = preference === "auto"

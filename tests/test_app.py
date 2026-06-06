@@ -15,7 +15,8 @@ class KanaAppTestCase(unittest.TestCase):
             self.assertIn(b"Kana Garden", response.data)
             self.assertIn(b"manifest.webmanifest", response.data)
             self.assertIn(b'skip-button', response.data)
-            self.assertIn(b"v0.7.0", response.data)
+            self.assertIn(b"v0.8.0", response.data)
+            self.assertIn(b"font-toggle", response.data)
 
     def test_pwa_files_are_served(self):
         for path in (

@@ -250,13 +250,39 @@ legend span { float: right; color: var(--muted); font-size: 10px; font-weight: 5
   font: 400 clamp(88px, 11vw, 126px)/1 "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
   transition: opacity 180ms ease, transform 180ms ease, color 180ms ease;
 }
+html[data-character-font="clear"] .kana-prompt {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  font-weight: 500;
+}
 .kana-prompt.changing { opacity: 0; transform: translateY(6px); }
 .kana-prompt.success { color: var(--green); transform: scale(1.06); }
+.prompt-meta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+}
 .script-label {
-  position: relative; margin-top: 10px; padding: 5px 9px;
+  position: relative; padding: 5px 9px;
   border-radius: 999px; color: var(--green); background: var(--sage);
   font-size: 8px; font-weight: 900; letter-spacing: 0.13em;
 }
+.font-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 23px;
+  padding: 0 8px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-soft);
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 700;
+}
+.font-toggle:hover { color: var(--ink); background: var(--paper); }
 
 form label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 800; }
 .answer-row { display: flex; gap: 10px; }
@@ -334,6 +360,10 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   border: 1px solid var(--line); border-radius: 9px; background: var(--input);
 }
 .kana-cell strong { font: 400 23px/1.1 "Yu Mincho", serif; }
+html[data-character-font="clear"] .kana-cell strong {
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  font-weight: 500;
+}
 .kana-cell span { margin-top: 4px; color: var(--muted); font-size: 8px; }
 .kana-cell.kanji-cell { aspect-ratio: 0.9; }
 .kana-cell.kanji-cell strong { font-size: 27px; }
@@ -375,6 +405,8 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .practice-card { padding: 24px 19px 21px; min-height: 465px; }
   .settings-card { padding: 22px 19px; }
   .prompt-wrap { min-height: 190px; }
+  .font-toggle-label { display: none; }
+  .font-toggle { width: 25px; padding: 0; justify-content: center; }
   .answer-row {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
