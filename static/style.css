@@ -247,6 +247,10 @@ legend span { float: right; color: var(--muted); font-size: 10px; font-weight: 5
 }
 .kana-prompt {
   position: relative;
+  width: clamp(140px, 15vw, 176px);
+  height: clamp(112px, 12vw, 142px);
+  display: grid;
+  place-items: center;
   font: 400 clamp(88px, 11vw, 126px)/1 "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
   transition: opacity 180ms ease, transform 180ms ease, color 180ms ease;
 }
@@ -405,6 +409,7 @@ html[data-character-font="clear"] .kana-cell strong {
   .practice-card { padding: 24px 19px 21px; min-height: 465px; }
   .settings-card { padding: 22px 19px; }
   .prompt-wrap { min-height: 190px; }
+  .kana-prompt { width: 140px; height: 112px; }
   .font-toggle-label { display: none; }
   .font-toggle { width: 25px; padding: 0; justify-content: center; }
   .answer-row {

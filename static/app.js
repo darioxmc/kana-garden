@@ -93,6 +93,10 @@ function applyCharacterFont(preference) {
   fontToggle.title = `Switch to ${isClear ? "brush" : "clear"} characters`;
 }
 
+fontToggle.addEventListener("pointerdown", (event) => {
+  event.preventDefault();
+});
+
 fontToggle.addEventListener("click", () => {
   const current = localStorage.getItem(FONT_KEY) || "brush";
   const next = current === "brush" ? "clear" : "brush";
