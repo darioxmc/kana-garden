@@ -55,6 +55,7 @@ html { background: var(--cream); }
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: clip;
   color: var(--ink);
   background:
     radial-gradient(circle at 8% 7%, rgba(217, 121, 95, 0.09), transparent 24rem),
@@ -372,9 +373,25 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .practice-card { padding: 24px 19px 21px; min-height: 465px; }
   .settings-card { padding: 22px 19px; }
   .prompt-wrap { min-height: 190px; }
-  .answer-row { gap: 7px; }
-  .answer-row button { min-width: 92px; }
-  .answer-row .skip-button { min-width: 56px; padding-inline: 8px; }
+  .answer-row {
+    display: grid;
+    grid-template-columns: 1fr 92px;
+    gap: 7px;
+  }
+  .answer-row input {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+  .answer-row button { min-width: 0; }
+  .answer-row .skip-button {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+  }
+  .answer-row #check-button {
+    grid-column: 2;
+    grid-row: 2;
+  }
   .stats { margin-top: 18px; }
   .stat-icon { display: none; }
   .stats > div { gap: 0; }
