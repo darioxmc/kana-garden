@@ -64,9 +64,13 @@ const state = {
   hasAttempted: Boolean(stored.hasAttempted),
   current: null,
   recentPrompts: [],
+  resultTimer: null,
+  transitionTimer: null,
 };
 
 const promptEl = document.querySelector("#kana-prompt");
+const promptWrap = document.querySelector(".prompt-wrap");
+const practiceCard = document.querySelector(".practice-card");
 const scriptLabel = document.querySelector("#script-label");
 const form = document.querySelector("#answer-form");
 const input = document.querySelector("#answer-input");
@@ -76,6 +80,10 @@ const skipButton = document.querySelector("#skip-button");
 const practiceTitle = document.querySelector("#practice-title");
 const answerLabel = document.querySelector("#answer-label");
 const focusFieldset = document.querySelector("#focus-fieldset");
+const resultReveal = document.querySelector("#result-reveal");
+const resultMark = document.querySelector("#result-mark");
+const resultStatus = document.querySelector("#result-status");
+const resultAnswer = document.querySelector("#result-answer");
 const themeToggle = document.querySelector("#theme-toggle");
 const fontToggle = document.querySelector("#font-toggle");
 const themeColor = document.querySelector('meta[name="theme-color"]');
@@ -83,6 +91,8 @@ const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const THEME_KEY = "kana-garden-theme";
 const THEME_OPTIONS = ["auto", "day", "night"];
 const FONT_KEY = "kana-garden-character-font";
+const RESULT_DURATION_MS = 1500;
+const SCROLL_DURATION_MS = 480;
 
 function applyCharacterFont(preference) {
   const isClear = preference === "clear";
@@ -181,7 +191,22 @@ function randomItem(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+function cancelResultSequence() {
+  window.clearTimeout(state.resultTimer);
+  window.clearTimeout(state.transitionTimer);
+  state.resultTimer = null;
+  state.transitionTimer = null;
+  state.awaitingNext = false;
+  practiceCard.classList.remove("is-reviewing", "result-correct", "result-error", "result-skipped");
+  resultReveal.classList.remove("is-closing");
+  resultReveal.setAttribute("aria-hidden", "true");
+  promptWrap.classList.remove("scrolling-out");
+  checkButton.disabled = false;
+  skipButton.disabled = false;
+}
+
 function nextQuestion() {
+  cancelResultSequence();
   const currentSettings = settings();
   const isKanji = currentSettings.script === "kanji";
 
@@ -225,6 +250,8 @@ function showQuestion(prompt, label) {
     state.awaitingNext = false;
     checkButton.innerHTML = 'Check <span aria-hidden="true">→</span>';
     promptEl.classList.remove("changing");
+    promptEl.classList.add("scrolling-in");
+    window.setTimeout(() => promptEl.classList.remove("scrolling-in"), SCROLL_DURATION_MS);
     input.focus();
   }, 120);
 }
@@ -234,29 +261,42 @@ function acceptedAnswers(answer) {
   return [answer, alternates[answer]].filter(Boolean);
 }
 
+function showResult(kind, status, answer) {
+  const marks = { correct: "✓", error: "×", skipped: "→" };
+
+  state.awaitingNext = true;
+  resultMark.textContent = marks[kind];
+  resultStatus.textContent = status;
+  resultAnswer.textContent = answer;
+  resultReveal.setAttribute("aria-hidden", "false");
+  practiceCard.classList.add("is-reviewing", `result-${kind}`);
+  checkButton.disabled = true;
+  skipButton.disabled = true;
+  feedback.textContent = "Moving to the next character automatically";
+  feedback.className = "feedback";
+
+  state.resultTimer = window.setTimeout(() => {
+    resultReveal.classList.add("is-closing");
+    promptWrap.classList.add("scrolling-out");
+    state.transitionTimer = window.setTimeout(nextQuestion, SCROLL_DURATION_MS);
+  }, RESULT_DURATION_MS);
+}
+
 skipButton.addEventListener("click", () => {
-  if (state.awaitingNext) {
-    nextQuestion();
-    return;
-  }
+  if (state.awaitingNext) return;
 
   const isKanji = state.current.kind === "kanji";
   const expected = isKanji ? state.current.item.meanings[0] : state.current.item.romaji;
-  feedback.textContent = isKanji
-    ? `Skipped — ${state.current.prompt} means “${expected}” · ${state.current.item.reading}`
-    : `Skipped — ${state.current.prompt} is “${expected}”`;
-  feedback.className = "feedback skipped";
-  state.awaitingNext = true;
-  checkButton.innerHTML = 'Next <span aria-hidden="true">→</span>';
+  const answer = isKanji
+    ? `${state.current.prompt} means “${expected}” · ${state.current.item.reading}`
+    : `${state.current.prompt} is “${expected}”`;
+  showResult("skipped", "Skipped", answer);
 });
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  if (state.awaitingNext) {
-    nextQuestion();
-    return;
-  }
+  if (state.awaitingNext) return;
 
   const answer = input.value.trim().toLowerCase();
   if (!answer) {
@@ -281,22 +321,18 @@ form.addEventListener("submit", (event) => {
   if (correct) {
     state.correct += 1;
     state.streak += 1;
-    feedback.textContent = isKanji
+    const resultText = isKanji
       ? `Correct — ${state.current.prompt} means “${expected}” · ${state.current.item.reading}`
-      : `Correct — ${state.current.prompt} is “${expected}”`;
-    feedback.className = "feedback correct";
-    promptEl.classList.add("success");
-    window.setTimeout(() => promptEl.classList.remove("success"), 450);
+      : `${state.current.prompt} is “${expected}”`;
+    showResult("correct", "Correct", resultText.replace(/^Correct — /, ""));
   } else {
     state.streak = 0;
-    feedback.textContent = isKanji
+    const resultText = isKanji
       ? `Not quite — ${state.current.prompt} means “${expected}” · ${state.current.item.reading}`
-      : `Not quite — ${state.current.prompt} is “${expected}”`;
-    feedback.className = "feedback error";
+      : `${state.current.prompt} is “${expected}”`;
+    showResult("error", "Not quite", resultText.replace(/^Not quite — /, ""));
   }
 
-  state.awaitingNext = true;
-  checkButton.innerHTML = 'Next <span aria-hidden="true">→</span>';
   updateStats();
   saveProgress();
 });
@@ -306,6 +342,7 @@ document.querySelectorAll('input[name="script"], #row-picker input').forEach((co
 });
 
 document.querySelector("#reset-progress").addEventListener("click", () => {
+  cancelResultSequence();
   Object.assign(state, {
     total: 0,
     correct: 0,

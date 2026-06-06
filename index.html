@@ -105,6 +105,13 @@
                 <span class="font-toggle-label">Brush</span>
               </button>
             </div>
+            <div class="result-reveal" id="result-reveal" aria-live="assertive" aria-hidden="true">
+              <span class="result-mark" id="result-mark" aria-hidden="true">✓</span>
+              <strong class="result-status" id="result-status">Correct</strong>
+              <p class="result-answer" id="result-answer"></p>
+              <span class="result-next">Next character coming up</span>
+              <span class="result-countdown" aria-hidden="true"></span>
+            </div>
           </div>
           <form id="answer-form" autocomplete="off">
             <label for="answer-input" id="answer-label">Type the romaji</label>
@@ -129,7 +136,7 @@
     <footer>
       <p>Built for steady progress <span aria-hidden="true">·</span> 頑張って</p>
       <div class="footer-actions">
-        <span class="app-version">v0.8.4</span>
+        <span class="app-version">v0.9.2</span>
         <button id="reset-progress" type="button">Reset session</button>
       </div>
     </footer>
