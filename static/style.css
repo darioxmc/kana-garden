@@ -405,7 +405,6 @@ html[data-character-font="clear"] .kana-cell strong {
   .settings-card { box-shadow: 0 14px 40px rgba(47, 61, 52, 0.08); }
   .kana-grid { grid-template-columns: repeat(6, 1fr); }
 
-  body:has(#answer-input:focus) .settings-card { visibility: hidden; }
   body:has(#answer-input:focus) .prompt-wrap {
     transform: translateY(14px);
   }
