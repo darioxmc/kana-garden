@@ -72,6 +72,7 @@ const form = document.querySelector("#answer-form");
 const input = document.querySelector("#answer-input");
 const feedback = document.querySelector("#feedback");
 const checkButton = document.querySelector("#check-button");
+const skipButton = document.querySelector("#skip-button");
 const practiceTitle = document.querySelector("#practice-title");
 const answerLabel = document.querySelector("#answer-label");
 const focusFieldset = document.querySelector("#focus-fieldset");
@@ -182,6 +183,7 @@ function showQuestion(prompt, label) {
     feedback.className = "feedback";
     input.value = "";
     state.awaitingNext = false;
+    skipButton.disabled = false;
     checkButton.innerHTML = 'Check <span aria-hidden="true">→</span>';
     promptEl.classList.remove("changing");
     input.focus();
@@ -192,6 +194,20 @@ function acceptedAnswers(answer) {
   const alternates = { shi: "si", chi: "ti", tsu: "tu", fu: "hu" };
   return [answer, alternates[answer]].filter(Boolean);
 }
+
+skipButton.addEventListener("click", () => {
+  if (state.awaitingNext) return;
+
+  const isKanji = state.current.kind === "kanji";
+  const expected = isKanji ? state.current.item.meanings[0] : state.current.item.romaji;
+  feedback.textContent = isKanji
+    ? `Skipped — ${state.current.prompt} means “${expected}” · ${state.current.item.reading}`
+    : `Skipped — ${state.current.prompt} is “${expected}”`;
+  feedback.className = "feedback skipped";
+  state.awaitingNext = true;
+  skipButton.disabled = true;
+  checkButton.innerHTML = 'Next <span aria-hidden="true">→</span>';
+});
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -239,6 +255,7 @@ form.addEventListener("submit", (event) => {
   }
 
   state.awaitingNext = true;
+  skipButton.disabled = true;
   checkButton.innerHTML = 'Next <span aria-hidden="true">→</span>';
   updateStats();
   saveProgress();

@@ -272,9 +272,21 @@ form label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 8
 }
 .answer-row button:hover { background: var(--green-dark); transform: translateY(-1px); }
 .answer-row button:disabled { opacity: 0.55; cursor: wait; transform: none; }
+.answer-row .skip-button {
+  min-width: 70px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  background: transparent;
+  box-shadow: none;
+}
+.answer-row .skip-button:hover {
+  color: var(--ink);
+  background: var(--surface-soft);
+}
 .feedback { min-height: 18px; margin: 8px 3px 0; color: var(--muted); font-size: 10px; }
 .feedback.correct { color: var(--green); font-weight: 700; }
 .feedback.error { color: var(--error); font-weight: 700; }
+.feedback.skipped { color: var(--gold); font-weight: 700; }
 
 .stats {
   display: grid; grid-template-columns: repeat(3, 1fr);
@@ -362,6 +374,7 @@ dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(4px); }
   .prompt-wrap { min-height: 190px; }
   .answer-row { gap: 7px; }
   .answer-row button { min-width: 92px; }
+  .answer-row .skip-button { min-width: 56px; padding-inline: 8px; }
   .stats { margin-top: 18px; }
   .stat-icon { display: none; }
   .stats > div { gap: 0; }
