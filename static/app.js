@@ -93,15 +93,31 @@ function applyCharacterFont(preference) {
   fontToggle.title = `Switch to ${isClear ? "brush" : "clear"} characters`;
 }
 
-fontToggle.addEventListener("pointerdown", (event) => {
-  event.preventDefault();
-});
-
-fontToggle.addEventListener("click", () => {
+function toggleCharacterFont() {
   const current = localStorage.getItem(FONT_KEY) || "brush";
   const next = current === "brush" ? "clear" : "brush";
   localStorage.setItem(FONT_KEY, next);
   applyCharacterFont(next);
+}
+
+let fontToggledByTouch = false;
+
+fontToggle.addEventListener("touchstart", (event) => {
+  event.preventDefault();
+  fontToggledByTouch = true;
+  toggleCharacterFont();
+}, { passive: false });
+
+fontToggle.addEventListener("mousedown", (event) => {
+  event.preventDefault();
+});
+
+fontToggle.addEventListener("click", () => {
+  if (fontToggledByTouch) {
+    fontToggledByTouch = false;
+    return;
+  }
+  toggleCharacterFont();
 });
 
 applyCharacterFont(localStorage.getItem(FONT_KEY) || "brush");
